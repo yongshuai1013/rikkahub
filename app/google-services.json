@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "435110276799",
+    "project_id": "test-app-4760f",
+    "storage_bucket": "test-app-4760f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435110276799:android:512b87b7384589658c200a",
+        "android_client_info": {
+          "package_name": "me.rerere.rikkahub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAwI_a57oU_rxCJvajnyVgau0Bv-GEMLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
