@@ -1,6 +1,7 @@
 package me.rerere.rikkahub.data.datastore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.IOException
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -18,16 +19,16 @@ import kotlinx.serialization.Serializable
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.ProviderSetting
 import me.rerere.rikkahub.AppScope
+import me.rerere.rikkahub.data.ai.mcp.McpServerConfig
 import me.rerere.rikkahub.data.ai.prompts.DEFAULT_LEARNING_MODE_PROMPT
 import me.rerere.rikkahub.data.ai.prompts.DEFAULT_OCR_PROMPT
 import me.rerere.rikkahub.data.ai.prompts.DEFAULT_SUGGESTION_PROMPT
 import me.rerere.rikkahub.data.ai.prompts.DEFAULT_TITLE_PROMPT
 import me.rerere.rikkahub.data.ai.prompts.DEFAULT_TRANSLATION_PROMPT
-import me.rerere.rikkahub.data.mcp.McpServerConfig
+import me.rerere.rikkahub.data.datastore.migration.PreferenceStoreV1Migration
 import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.data.model.Avatar
 import me.rerere.rikkahub.data.model.Tag
-import me.rerere.rikkahub.ui.theme.PresetThemeType
 import me.rerere.rikkahub.ui.theme.PresetThemes
 import me.rerere.rikkahub.utils.JsonInstant
 import me.rerere.rikkahub.utils.toMutableStateFlow
@@ -44,7 +45,7 @@ private val Context.settingsStore by preferencesDataStore(
     name = "settings",
     produceMigrations = { context ->
         listOf(
-            SharedPreferencesMigration(context, "settings"),
+            PreferenceStoreV1Migration()
         )
     }
 )
@@ -54,11 +55,14 @@ class SettingsStore(
     scope: AppScope,
 ) : KoinComponent {
     companion object {
+        // 版本号
+        val VERSION = intPreferencesKey("data_version")
+
         // UI设置
         val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
         val THEME_ID = stringPreferencesKey("theme_id")
-        val THEME_TYPE = stringPreferencesKey("theme_type")
         val DISPLAY_SETTING = stringPreferencesKey("display_setting")
+        val DEVELOPER_MODE = booleanPreferencesKey("developer_mode")
 
         // 模型选择
         val ENABLE_WEB_SEARCH = booleanPreferencesKey("enable_web_search")
@@ -138,9 +142,7 @@ class SettingsStore(
                 assistants = JsonInstant.decodeFromString(preferences[ASSISTANTS] ?: "[]"),
                 dynamicColor = preferences[DYNAMIC_COLOR] != false,
                 themeId = preferences[THEME_ID] ?: PresetThemes[0].id,
-                themeType = preferences[THEME_TYPE]?.let {
-                    JsonInstant.decodeFromString(it)
-                } ?: PresetThemeType.STANDARD,
+                developerMode = preferences[DEVELOPER_MODE] == true,
                 displaySetting = JsonInstant.decodeFromString(preferences[DISPLAY_SETTING] ?: "{}"),
                 searchServices = preferences[SEARCH_SERVICES]?.let {
                     JsonInstant.decodeFromString(it)
@@ -175,6 +177,7 @@ class SettingsStore(
                     provider.copyProvider(
                         builtIn = defaultProvider.builtIn,
                         description = defaultProvider.description,
+                        shortDescription = defaultProvider.shortDescription,
                     )
                 } else provider
             }.toMutableList()
@@ -238,14 +241,15 @@ class SettingsStore(
         .toMutableStateFlow(scope, Settings.dummy())
 
     suspend fun update(settings: Settings) {
-        require(settings.init.not()) {
-            "Cannot update dummy settings"
+        if(settings.init) {
+            Log.w(TAG, "Cannot update dummy settings")
+            return
         }
         settingsFlow.value = settings
         dataStore.edit { preferences ->
             preferences[DYNAMIC_COLOR] = settings.dynamicColor
             preferences[THEME_ID] = settings.themeId
-            preferences[THEME_TYPE] = JsonInstant.encodeToString(settings.themeType)
+            preferences[DEVELOPER_MODE] = settings.developerMode
             preferences[DISPLAY_SETTING] = JsonInstant.encodeToString(settings.displaySetting)
 
             preferences[ENABLE_WEB_SEARCH] = settings.enableWebSearch
@@ -298,7 +302,7 @@ data class Settings(
     val init: Boolean = false,
     val dynamicColor: Boolean = true,
     val themeId: String = PresetThemes[0].id,
-    val themeType: PresetThemeType = PresetThemeType.STANDARD,
+    val developerMode: Boolean = false,
     val displaySetting: DisplaySetting = DisplaySetting(),
     val enableWebSearch: Boolean = false,
     val favoriteModels: List<Uuid> = emptyList(),

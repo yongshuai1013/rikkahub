@@ -75,6 +75,13 @@
   <string name="assistant_page_quick_messages_desc">設定快速訊息捷徑</string>
   <string name="assistant_page_recent_chats">參考歷史聊天記錄</string>
   <string name="assistant_page_recent_chats_desc">啟用後，助手將參考最近的聊天歷史記錄來提供更有上下文的回應</string>
+  <string name="assistant_page_regex_affecting_scopes">影響範圍：</string>
+  <string name="assistant_page_regex_desc">定義正規表示式模式，在傳送或接收前轉換訊息</string>
+  <string name="assistant_page_regex_find_regex">尋找正規表示式</string>
+  <string name="assistant_page_regex_name">名稱</string>
+  <string name="assistant_page_regex_replace_string">取代字串</string>
+  <string name="assistant_page_regex_title">訊息正規表示式</string>
+  <string name="assistant_page_regex_visual_only">僅視覺效果（僅影響顯示，不影響實際訊息）</string>
   <string name="assistant_page_remove">移除</string>
   <string name="assistant_page_remove_background">移除背景</string>
   <string name="assistant_page_save">保存</string>
@@ -172,6 +179,8 @@
   <string name="chat_message_tool_create_memory">創建了記憶</string>
   <string name="chat_message_tool_delete_memory">刪除了記憶</string>
   <string name="chat_message_tool_edit_memory">更新了記憶</string>
+  <string name="chat_message_tool_scrape_prefix">爬取網站：%1$s</string>
+  <string name="chat_message_tool_scrape_web">爬取網頁</string>
   <string name="chat_message_tool_search_prefix">搜尋: %1$s</string>
   <string name="chat_message_tool_search_results_count">共 %1$d 條結果</string>
   <string name="chat_message_tool_search_web">搜尋網頁: %1$s</string>
@@ -271,6 +280,7 @@
   <string name="language_japanese">🇯🇵 日本語</string>
   <string name="language_korean">🇰🇷 한국어</string>
   <string name="language_simplified_chinese">🇨🇳 简体中文</string>
+  <string name="language_spanish">🇪🇸 西班牙文</string>
   <string name="language_traditional_chinese">🇨🇳 繁體中文</string>
   <string name="mcp_picker_syncing">正在同步MCP伺服器...</string>
   <string name="mcp_picker_title">MCP伺服器</string>
@@ -333,6 +343,8 @@
   <string name="reasoning_set_budget">設置推理預算 (%1$d tokens)</string>
   <string name="regenerate">重新生成</string>
   <string name="render_with_webview">網頁視圖渲染</string>
+  <string name="search_ability_scrape">爬取</string>
+  <string name="search_ability_search">搜尋</string>
   <string name="search_picker_title">搜尋設定</string>
   <string name="select_and_copy">選擇複製</string>
   <string name="send">發送</string>
@@ -344,6 +356,8 @@
   <string name="setting_display_page_chat_list_model_icon_title">聊天列表模型圖標</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">當應用程式啟動時，自動建立一個新的對話</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">啟動時新建對話</string>
+  <string name="setting_display_page_developer_mode">開發者模式</string>
+  <string name="setting_display_page_developer_mode_desc">顯示更多偵錯功能，不建議一般使用者開啟。</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_desc">訊息生成時啟用觸覺回饋效果</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_title">訊息生成觸覺回饋</string>
   <string name="setting_display_page_font_size_preview">這是一個**示例**的聊天文本</string>
@@ -533,6 +547,7 @@
   <string name="setting_provider_page_save_success">保存成功</string>
   <string name="setting_provider_page_scan_error">錯誤: %s</string>
   <string name="setting_provider_page_scan_qr_code">掃描二維碼</string>
+  <string name="setting_provider_page_search_providers">搜尋提供者</string>
   <string name="setting_provider_page_select_from_gallery">從相簿選擇</string>
   <string name="setting_provider_page_service_account_email">服務帳戶郵箱</string>
   <string name="setting_provider_page_share">分享</string>
@@ -611,6 +626,7 @@
   <string name="tag_input_dialog_title">添加標籤</string>
   <string name="take_picture">拍照</string>
   <string name="test_tts">測試語音</string>
+  <string name="theme_name_autumn">秋葉黃</string>
   <string name="theme_name_black">中性黑</string>
   <string name="theme_name_ocean">海灣藍</string>
   <string name="theme_name_sakura">櫻花粉</string>

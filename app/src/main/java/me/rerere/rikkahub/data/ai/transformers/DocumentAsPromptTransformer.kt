@@ -1,22 +1,19 @@
 package me.rerere.rikkahub.data.ai.transformers
 
-import android.content.Context
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import com.chaquo.python.Python
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import me.rerere.ai.provider.Model
-import me.rerere.ai.ui.InputMessageTransformer
 import me.rerere.ai.ui.UIMessage
 import me.rerere.ai.ui.UIMessagePart
+import me.rerere.document.DocxParser
+import me.rerere.document.PdfParser
 import java.io.File
 
 object DocumentAsPromptTransformer : InputMessageTransformer {
     override suspend fun transform(
-        context: Context,
+        ctx: TransformerContext,
         messages: List<UIMessage>,
-        model: Model
     ): List<UIMessage> {
         return withContext(Dispatchers.IO) {
             messages.map { message ->
@@ -52,14 +49,10 @@ object DocumentAsPromptTransformer : InputMessageTransformer {
     }
 
     private fun parsePdfAsText(file: File): String {
-        val module = Python.getInstance().getModule("pdf_util")
-        val reader = module.callAttr("extract_text_from_pdf", file.absolutePath).toString()
-        return reader
+        return PdfParser.parserPdf(file)
     }
 
     private fun parseDocxAsText(file: File): String {
-        val module = Python.getInstance().getModule("docx_util")
-        val reader = module.callAttr("extract_text_from_docx", file.absolutePath).toString()
-        return reader
+        return DocxParser.parse(file)
     }
 }

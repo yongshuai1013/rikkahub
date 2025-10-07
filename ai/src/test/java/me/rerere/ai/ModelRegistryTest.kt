@@ -20,11 +20,21 @@ class ModelRegistryTest {
 
     @Test
     fun testGemini25() {
+        assert(ModelRegistry.GEMINI_LATEST.match("gemini-flash-latest"))
+        assert(ModelRegistry.GEMINI_LATEST.match("gemini-pro-latest"))
         assert(ModelRegistry.GEMINI_2_5_FLASH.match("gemini-2.5-flash"))
         assert(!ModelRegistry.GEMINI_2_5_FLASH.match("gemini-2.5-pro"))
         assert(!ModelRegistry.GEMINI_2_5_FLASH.match("gemini-2.5-flash-image-preview"))
         assert(ModelRegistry.GEMINI_2_5_IMAGE.match("gemini-2.5-flash-image"))
         assert(ModelRegistry.MODEL_OUTPUT_MODALITIES.getData("gemini-2.5-flash-image") == listOf(Modality.TEXT, Modality.IMAGE))
         assert(ModelRegistry.MODEL_OUTPUT_MODALITIES.getData("gemini-2.5-flash") == listOf(Modality.TEXT))
+    }
+
+    @Test
+    fun testClaude45() {
+        assert(ModelRegistry.CLAUDE_4_5.match("claude-sonnet-4.5-20250929"))
+        assert(ModelRegistry.CLAUDE_4_5.match("claude-4.5-sonnet"))
+        assert(!ModelRegistry.CLAUDE_4_5.match("claude-sonnet-4-20250929"))
+        assert(!ModelRegistry.CLAUDE_4_5.match("claude-4-sonnet"))
     }
 }

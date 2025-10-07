@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.internal.closeQuietly
 import okio.IOException
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resumeWithException
 import kotlin.uuid.Uuid
 
@@ -20,6 +21,8 @@ interface SearchService<T : SearchServiceOptions> {
     val name: String
 
     val parameters: InputSchema?
+
+    val scrapingParameters: InputSchema?
 
     @Composable
     fun Description()
@@ -29,6 +32,12 @@ interface SearchService<T : SearchServiceOptions> {
         commonOptions: SearchCommonOptions,
         serviceOptions: T
     ): Result<SearchResult>
+
+    suspend fun scrape(
+        params: JsonObject,
+        commonOptions: SearchCommonOptions,
+        serviceOptions: T
+    ): Result<ScrapedResult>
 
     companion object {
         @Suppress("UNCHECKED_CAST")
@@ -42,11 +51,19 @@ interface SearchService<T : SearchServiceOptions> {
                 is SearchServiceOptions.LinkUpOptions -> LinkUpService
                 is SearchServiceOptions.BraveOptions -> BraveSearchService
                 is SearchServiceOptions.MetasoOptions -> MetasoSearchService
+                is SearchServiceOptions.OllamaOptions -> OllamaSearchService
+                is SearchServiceOptions.PerplexityOptions -> PerplexitySearchService
+                is SearchServiceOptions.FirecrawlOptions -> FirecrawlSearchService
+                is SearchServiceOptions.JinaOptions -> JinaSearchService
             } as SearchService<T>
         }
 
         internal val httpClient by lazy {
             OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .followRedirects(true)
+                .followSslRedirects(true)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build()
         }
 
@@ -78,6 +95,25 @@ data class SearchResult(
 }
 
 @Serializable
+data class ScrapedResult(
+    val urls: List<ScrapedResultUrl>,
+)
+
+@Serializable
+data class ScrapedResultUrl(
+    val url: String,
+    val content: String,
+    val metadata: ScrapedResultMetadata? = null,
+)
+
+@Serializable
+data class ScrapedResultMetadata(
+    val title: String? = null,
+    val description: String? = null,
+    val language: String? = null,
+)
+
+@Serializable
 sealed class SearchServiceOptions {
     abstract val id: Uuid
 
@@ -92,7 +128,11 @@ sealed class SearchServiceOptions {
             SearXNGOptions::class to "SearXNG",
             LinkUpOptions::class to "LinkUp",
             BraveOptions::class to "Brave",
-            MetasoOptions::class to "秘塔"
+            MetasoOptions::class to "秘塔",
+            OllamaOptions::class to "Ollama",
+            PerplexityOptions::class to "Perplexity",
+            FirecrawlOptions::class to "Firecrawl",
+            JinaOptions::class to "Jina",
         )
     }
 
@@ -153,6 +193,35 @@ sealed class SearchServiceOptions {
     @Serializable
     @SerialName("metaso")
     data class MetasoOptions(
+        override val id: Uuid = Uuid.random(),
+        val apiKey: String = "",
+    ) : SearchServiceOptions()
+
+    @Serializable
+    @SerialName("ollama")
+    data class OllamaOptions(
+        override val id: Uuid = Uuid.random(),
+        val apiKey: String = "",
+    ) : SearchServiceOptions()
+
+    @Serializable
+    @SerialName("perplexity")
+    data class PerplexityOptions(
+        override val id: Uuid = Uuid.random(),
+        val apiKey: String = "",
+        val maxTokensPerPage: Int? = 1024,
+    ) : SearchServiceOptions()
+
+    @Serializable
+    @SerialName("firecrawl")
+    data class FirecrawlOptions(
+        override val id: Uuid = Uuid.random(),
+        val apiKey: String = "",
+    ) : SearchServiceOptions()
+
+    @Serializable
+    @SerialName("jina")
+    data class JinaOptions(
         override val id: Uuid = Uuid.random(),
         val apiKey: String = "",
     ) : SearchServiceOptions()

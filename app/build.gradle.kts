@@ -13,8 +13,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.chaquo.python)
-    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -25,15 +23,25 @@ android {
         applicationId = "me.rerere.rikkahub"
         minSdk = 26
         targetSdk = 36
-        versionCode = 100
-        versionName = "1.6.1"
+        versionCode = 108
+        versionName = "1.6.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        defaultConfig {
-            ndk {
-                abiFilters += listOf("arm64-v8a", "x86_64")
-            }
+        ndk {
+            abiFilters += listOf("arm64-v8a", "x86_64")
+        }
+    }
+
+    splits {
+        abi {
+            // AppBundle tasks usually contain "bundle" in their name
+            //noinspection WrongGradleMethod
+            val isBuildingBundle = gradle.startParameter.taskNames.any { it.lowercase().contains("bundle") }
+            isEnable = !isBuildingBundle
+            reset()
+            include("arm64-v8a", "x86_64")
+            isUniversalApk = true
         }
     }
 
@@ -140,26 +148,13 @@ kotlin {
     }
 }
 
-chaquopy {
-    defaultConfig {
-        version = "3.12"
-        if(Os.isFamily(Os.FAMILY_MAC)) buildPython("/Library/Frameworks/Python.framework/Versions/3.12/bin/python3")
-        pip {
-            install("pypdf")
-            install("python-docx")
-        }
-    }
-}
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.browser)
-
     implementation(libs.androidx.profileinstaller)
-    baselineProfile(project(":app:baselineprofile"))
 
     // Compose
     implementation(libs.androidx.activity.compose)
@@ -207,6 +202,12 @@ dependencies {
     implementation(libs.okhttp.sse)
     implementation(libs.retrofit)
     implementation(libs.retrofit.serialization.json)
+
+    // ktor client
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
     // ucrop
     implementation(libs.ucrop)
@@ -271,6 +272,7 @@ dependencies {
 
     // modules
     implementation(project(":ai"))
+    implementation(project(":document"))
     implementation(project(":highlight"))
     implementation(project(":search"))
     implementation(project(":tts"))
@@ -279,7 +281,7 @@ dependencies {
     implementation(kotlin("reflect"))
 
     // Leak Canary
-    debugImplementation(libs.leakcanary.android)
+    // debugImplementation(libs.leakcanary.android)
 
     // tests
     testImplementation(libs.junit)

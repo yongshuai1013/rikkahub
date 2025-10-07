@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven("https://repo.itextsupport.com/android")
     }
     resolutionStrategy {
         eachPlugin {
@@ -24,7 +25,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://androidx.dev/snapshots/builds/13617490/artifacts/repository")
         mavenLocal()
     }
 }
@@ -37,3 +37,4 @@ include(":search")
 include(":tts")
 include(":common")
 include(":app:baselineprofile")
+include(":document")

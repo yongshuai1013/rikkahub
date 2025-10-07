@@ -45,8 +45,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
@@ -69,9 +67,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,13 +102,6 @@ import com.composables.icons.lucide.Zap
 import com.dokar.sonner.ToastType
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.ModelAbility
 import me.rerere.ai.provider.ModelType
@@ -123,7 +111,7 @@ import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.datastore.Settings
 import me.rerere.rikkahub.data.datastore.getCurrentAssistant
 import me.rerere.rikkahub.data.datastore.getCurrentChatModel
-import me.rerere.rikkahub.data.mcp.McpManager
+import me.rerere.rikkahub.data.ai.mcp.McpManager
 import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.data.model.Conversation
 import me.rerere.rikkahub.ui.components.ui.KeepScreenOn
@@ -132,8 +120,7 @@ import me.rerere.rikkahub.ui.components.ui.permission.PermissionManager
 import me.rerere.rikkahub.ui.components.ui.permission.rememberPermissionState
 import me.rerere.rikkahub.ui.context.LocalSettings
 import me.rerere.rikkahub.ui.context.LocalToaster
-import me.rerere.rikkahub.utils.GetContentWithMultiMime
-import me.rerere.rikkahub.utils.JsonInstant
+import me.rerere.rikkahub.ui.hooks.ChatInputState
 import me.rerere.rikkahub.utils.createChatFilesByContents
 import me.rerere.rikkahub.utils.deleteChatFiles
 import me.rerere.rikkahub.utils.getFileMimeType
@@ -141,101 +128,6 @@ import me.rerere.rikkahub.utils.getFileNameFromUri
 import java.io.File
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
-
-class ChatInputState {
-    val textContent = TextFieldState()
-    var messageContent by mutableStateOf(listOf<UIMessagePart>())
-    var editingMessage by mutableStateOf<Uuid?>(null)
-    var loading by mutableStateOf(false)
-
-    fun clearInput() {
-        textContent.setTextAndPlaceCursorAtEnd("")
-        messageContent = emptyList()
-        editingMessage = null
-    }
-
-    fun isEditing() = editingMessage != null
-
-    fun setMessageText(text: String) {
-        textContent.setTextAndPlaceCursorAtEnd(text)
-    }
-
-    fun appendText(content: String) {
-        textContent.setTextAndPlaceCursorAtEnd(textContent.text.toString() + content)
-    }
-
-    fun setContents(contents: List<UIMessagePart>) {
-        val text = contents.filterIsInstance<UIMessagePart.Text>().joinToString { it.text }
-        textContent.setTextAndPlaceCursorAtEnd(text)
-        messageContent = contents.filter { it !is UIMessagePart.Text }
-    }
-
-    fun getContents(): List<UIMessagePart> {
-        return listOf(UIMessagePart.Text(textContent.text.toString())) + messageContent
-    }
-
-    fun isEmpty(): Boolean {
-        return textContent.text.isEmpty() && messageContent.isEmpty()
-    }
-
-    fun addImages(uris: List<Uri>) {
-        val newMessage = messageContent.toMutableList()
-        uris.forEach { uri ->
-            newMessage.add(UIMessagePart.Image(uri.toString()))
-        }
-        messageContent = newMessage
-    }
-
-    fun addFiles(uris: List<UIMessagePart.Document>) {
-        val newMessage = messageContent.toMutableList()
-        uris.forEach {
-            newMessage.add(it)
-        }
-        messageContent = newMessage
-    }
-}
-
-object ChatInputStateSaver : Saver<ChatInputState, String> {
-    override fun restore(value: String): ChatInputState? {
-        val jsonObject = JsonInstant.parseToJsonElement(value).jsonObject
-        val messageContent = jsonObject["messageContent"]?.let {
-            JsonInstant.decodeFromJsonElement<List<UIMessagePart>>(it)
-        }
-        val editingMessage = jsonObject["editingMessage"]?.jsonPrimitive?.contentOrNull?.let {
-            Uuid.parse(it)
-        }
-        val textContent = jsonObject["textContent"]?.jsonPrimitive?.contentOrNull ?: ""
-        val state = ChatInputState()
-        state.messageContent = messageContent ?: emptyList()
-        state.editingMessage = editingMessage
-        state.setMessageText(textContent)
-        return state
-    }
-
-    override fun SaverScope.save(value: ChatInputState): String? {
-        return JsonInstant.encodeToString(buildJsonObject {
-            put("textContent", value.textContent.text.toString())
-            put("messageContent", JsonInstant.encodeToJsonElement(value.messageContent))
-            put("editingMessage", JsonInstant.encodeToJsonElement(value.editingMessage))
-        })
-    }
-}
-
-
-@Composable
-fun rememberChatInputState(
-    textContent: String = "",
-    message: List<UIMessagePart> = emptyList(),
-    loading: Boolean = false,
-): ChatInputState {
-    return rememberSaveable(textContent, message, loading, saver = ChatInputStateSaver) {
-        ChatInputState().apply {
-            this.textContent.setTextAndPlaceCursorAtEnd(textContent)
-            this.messageContent = message
-            this.loading = loading
-        }
-    }
-}
 
 enum class ExpandState {
     Collapsed,
@@ -1031,20 +923,74 @@ fun TakePicButton(onAddImages: (List<Uri>) -> Unit = {}) {
 @Composable
 fun FilePickButton(onAddFiles: (List<UIMessagePart.Document>) -> Unit = {}) {
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val pickMedia =
-        rememberLauncherForActivityResult(GetContentWithMultiMime()) { uris ->
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
             if (uris.isNotEmpty()) {
-                val documents = uris.map { uri ->
+                val allowedMimeTypes = setOf(
+                    "text/plain",
+                    "text/html",
+                    "text/css",
+                    "text/javascript",
+                    "text/csv",
+                    "text/xml",
+                    "application/json",
+                    "application/javascript",
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "application/vnd.ms-excel",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "application/vnd.ms-powerpoint",
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                )
+
+                val documents = uris.mapNotNull { uri ->
                     val fileName = context.getFileNameFromUri(uri) ?: "file"
-                    val mime = context.getFileMimeType(uri)
-                    val localUri = context.createChatFilesByContents(listOf(uri))[0]
-                    UIMessagePart.Document(
-                        url = localUri.toString(),
-                        fileName = fileName,
-                        mime = mime ?: "text/*"
-                    )
+                    val mime = context.getFileMimeType(uri) ?: "text/plain"
+
+                    // Filter by MIME type or file extension
+                    val isAllowed = allowedMimeTypes.contains(mime) ||
+                        mime.startsWith("text/") ||
+                        mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                        mime == "application/pdf" ||
+                        fileName.endsWith(".txt", ignoreCase = true) ||
+                        fileName.endsWith(".md", ignoreCase = true) ||
+                        fileName.endsWith(".csv", ignoreCase = true) ||
+                        fileName.endsWith(".json", ignoreCase = true) ||
+                        fileName.endsWith(".js", ignoreCase = true) ||
+                        fileName.endsWith(".html", ignoreCase = true) ||
+                        fileName.endsWith(".css", ignoreCase = true) ||
+                        fileName.endsWith(".xml", ignoreCase = true) ||
+                        fileName.endsWith(".py", ignoreCase = true) ||
+                        fileName.endsWith(".java", ignoreCase = true) ||
+                        fileName.endsWith(".kt", ignoreCase = true) ||
+                        fileName.endsWith(".ts", ignoreCase = true) ||
+                        fileName.endsWith(".tsx", ignoreCase = true) ||
+                        fileName.endsWith(".md", ignoreCase = true) ||
+                        fileName.endsWith(".markdown", ignoreCase = true) ||
+                        fileName.endsWith(".mdx", ignoreCase = true) ||
+                        fileName.endsWith(".yml", ignoreCase = true) ||
+                        fileName.endsWith(".yaml", ignoreCase = true)
+
+                    if (isAllowed) {
+                        val localUri = context.createChatFilesByContents(listOf(uri))[0]
+                        UIMessagePart.Document(
+                            url = localUri.toString(),
+                            fileName = fileName,
+                            mime = mime
+                        )
+                    } else {
+                        null
+                    }
                 }
-                onAddFiles(documents)
+
+                if (documents.isNotEmpty()) {
+                    onAddFiles(documents)
+                } else {
+                    // Show toast for unsupported file types
+                    toaster.show("不支持的文件类型", type = ToastType.Error)
+                }
             }
         }
     BigIconTextButton(
@@ -1055,15 +1001,7 @@ fun FilePickButton(onAddFiles: (List<UIMessagePart.Document>) -> Unit = {}) {
             Text(stringResource(R.string.upload_file))
         }
     ) {
-        pickMedia.launch(
-            listOf(
-                "text/*",
-                "application/json",
-                "application/javascript",
-                "application/pdf",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            )
-        )
+        pickMedia.launch(arrayOf("*/*"))
     }
 }
 

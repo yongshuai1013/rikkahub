@@ -336,7 +336,7 @@ class GoogleProvider(private val client: OkHttpClient) : Provider<ProviderSettin
         // System message if available
         val systemMessage = messages.firstOrNull { it.role == MessageRole.SYSTEM }
         if (systemMessage != null && !params.model.outputModalities.contains(Modality.IMAGE)) {
-            put("system_instruction", buildJsonObject {
+            put("systemInstruction", buildJsonObject {
                 putJsonArray("parts") {
                     add(buildJsonObject {
                         put(
@@ -650,7 +650,7 @@ class GoogleProvider(private val client: OkHttpClient) : Provider<ProviderSettin
                     ImageAspectRatio.PORTRAIT -> "9:16"
                 })
             }
-        }
+        }.mergeCustomBody(params.customBody)
 
         val url = buildUrl(
             providerSetting = providerSetting,
@@ -665,6 +665,7 @@ class GoogleProvider(private val client: OkHttpClient) : Provider<ProviderSettin
             providerSetting = providerSetting,
             request = Request.Builder()
                 .url(url)
+                .headers(params.customHeaders.toHeaders())
                 .post(
                     json.encodeToString(requestBody).toRequestBody("application/json".toMediaType())
                 )

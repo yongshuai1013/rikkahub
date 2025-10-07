@@ -622,6 +622,7 @@
   <string name="language_french">🇫🇷 Français</string>
   <string name="language_german">🇩🇪 Deutsch</string>
   <string name="language_italian">🇮🇹 Italiano</string>
+  <string name="language_spanish">🇪🇸 Español</string>
 
   <!-- Donate -->
   <string name="setting_page_donate">Donate</string>
@@ -724,4 +725,19 @@
   <string name="setting_display_page_notification_message_generated_desc">Show a notification when a message is generated if the app is not in the foreground</string>
   <string name="permission_notification">Notification</string>
   <string name="permission_notification_desc">Send notifications</string>
+  <string name="theme_name_autumn">Autumn Yellow</string>
+  <string name="assistant_page_regex_name">Name</string>
+  <string name="assistant_page_regex_find_regex">Find Regex</string>
+  <string name="assistant_page_regex_replace_string">Replace String</string>
+  <string name="assistant_page_regex_affecting_scopes">Affecting Scopes:</string>
+  <string name="assistant_page_regex_visual_only">Visual Only (affects display only, not actual message)</string>
+  <string name="assistant_page_regex_title">Message Regexes</string>
+  <string name="assistant_page_regex_desc">Define regex patterns to transform messages before sending/receiving</string>
+  <string name="setting_display_page_developer_mode">Developer Mode</string>
+  <string name="setting_display_page_developer_mode_desc">Show more debugging features. Not recommended for general users.</string>
+    <string name="chat_message_tool_scrape_prefix">Scrape website: %1$s</string>
+  <string name="chat_message_tool_scrape_web">Scrape web page</string>
+  <string name="search_ability_search">Search</string>
+  <string name="search_ability_scrape">Scrape</string>
+  <string name="setting_provider_page_search_providers">Search providers</string>
 </resources>

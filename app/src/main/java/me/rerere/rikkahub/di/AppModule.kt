@@ -7,7 +7,9 @@ import com.google.firebase.remoteconfig.remoteConfig
 import kotlinx.serialization.json.Json
 import me.rerere.highlight.Highlighter
 import me.rerere.rikkahub.AppScope
-import me.rerere.rikkahub.data.ai.LocalTools
+import me.rerere.rikkahub.data.ai.AILoggingManager
+import me.rerere.rikkahub.data.ai.tools.LocalTools
+import me.rerere.rikkahub.service.ChatService
 import me.rerere.rikkahub.utils.EmojiData
 import me.rerere.rikkahub.utils.EmojiUtils
 import me.rerere.rikkahub.utils.JsonInstant
@@ -52,5 +54,24 @@ val appModule = module {
 
     single {
         Firebase.analytics
+    }
+
+    single {
+        AILoggingManager()
+    }
+
+    single {
+        ChatService(
+            context = get(),
+            appScope = get(),
+            settingsStore = get(),
+            conversationRepo = get(),
+            memoryRepository = get(),
+            generationHandler = get(),
+            templateTransformer = get(),
+            providerManager = get(),
+            localTools = get(),
+            mcpManager = get()
+        )
     }
 }

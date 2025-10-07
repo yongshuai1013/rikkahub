@@ -75,6 +75,13 @@
   <string name="assistant_page_quick_messages_desc">빠른 메시지 단축어 구성</string>
   <string name="assistant_page_recent_chats">최근 채팅 참조</string>
   <string name="assistant_page_recent_chats_desc">활성화 시, 어시스턴트가 최근 채팅 기록을 참조하여 더 맥락에 맞는 응답을 제공합니다</string>
+  <string name="assistant_page_regex_affecting_scopes">영향 범위:</string>
+  <string name="assistant_page_regex_desc">메시지를 보내거나 받기 전에 변환할 정규식 패턴을 정의하세요</string>
+  <string name="assistant_page_regex_find_regex">정규식 찾기</string>
+  <string name="assistant_page_regex_name">이름</string>
+  <string name="assistant_page_regex_replace_string">문자열 바꾸기</string>
+  <string name="assistant_page_regex_title">메시지 정규식</string>
+  <string name="assistant_page_regex_visual_only">시각적 표시만 (실제 메시지에는 영향을 주지 않고 표시만 변경)</string>
   <string name="assistant_page_remove">제거</string>
   <string name="assistant_page_remove_background">배경 제거</string>
   <string name="assistant_page_save">저장</string>
@@ -172,6 +179,8 @@
   <string name="chat_message_tool_create_memory">기억 생성됨</string>
   <string name="chat_message_tool_delete_memory">기억 삭제됨</string>
   <string name="chat_message_tool_edit_memory">기억 업데이트됨</string>
+  <string name="chat_message_tool_scrape_prefix">웹사이트 긁어오기: %1$s</string>
+  <string name="chat_message_tool_scrape_web">웹 페이지 긁어오기</string>
   <string name="chat_message_tool_search_prefix">검색: %1$s</string>
   <string name="chat_message_tool_search_results_count">%1$d개 결과</string>
   <string name="chat_message_tool_search_web">웹 검색: %1$s</string>
@@ -271,6 +280,7 @@
   <string name="language_japanese">🇯🇵 일본어</string>
   <string name="language_korean">🇰🇷 한국어</string>
   <string name="language_simplified_chinese">🇨🇳 중국어(간체)</string>
+  <string name="language_spanish">🇪🇸 스페인어</string>
   <string name="language_traditional_chinese">🇨🇳 중국어(번체)</string>
   <string name="mcp_picker_syncing">MCP 서버 동기화 중...</string>
   <string name="mcp_picker_title">MCP 서버</string>
@@ -333,6 +343,8 @@
   <string name="reasoning_set_budget">사고 예산 설정(%1$d 토큰)</string>
   <string name="regenerate">다시 생성</string>
   <string name="render_with_webview">WebView로 렌더링</string>
+  <string name="search_ability_scrape">스크래핑</string>
+  <string name="search_ability_search">검색</string>
   <string name="search_picker_title">검색 설정</string>
   <string name="select_and_copy">선택 및 복사</string>
   <string name="send">전송</string>
@@ -344,6 +356,8 @@
   <string name="setting_display_page_chat_list_model_icon_title">채팅 목록 모델 아이콘</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">앱 시작 시 새 대화 생성</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">앱 시작 시 새 채팅 생성</string>
+  <string name="setting_display_page_developer_mode">개발자 모드</string>
+  <string name="setting_display_page_developer_mode_desc">더 많은 디버깅 기능을 표시합니다. 일반 사용자에게는 권장하지 않습니다.</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_desc">메시지 생성 시 진동 피드백 활성화</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_title">메시지 생성 진동 효과 활성화</string>
   <string name="setting_display_page_font_size_preview">이것은 **예제** 채팅 텍스트입니다</string>
@@ -533,6 +547,7 @@
   <string name="setting_provider_page_save_success">저장 성공</string>
   <string name="setting_provider_page_scan_error">오류: %s</string>
   <string name="setting_provider_page_scan_qr_code">QR 코드 스캔</string>
+  <string name="setting_provider_page_search_providers">공급자 검색</string>
   <string name="setting_provider_page_select_from_gallery">갤러리에서 선택</string>
   <string name="setting_provider_page_service_account_email">서비스 계정 이메일</string>
   <string name="setting_provider_page_share">공유</string>
@@ -611,6 +626,7 @@
   <string name="tag_input_dialog_title">태그 추가</string>
   <string name="take_picture">사진 찍기</string>
   <string name="test_tts">TTS 테스트</string>
+  <string name="theme_name_autumn">가을 노랑</string>
   <string name="theme_name_black">중립 검정</string>
   <string name="theme_name_ocean">해양 청색</string>
   <string name="theme_name_sakura">벚꽃 핑크</string>

@@ -1,9 +1,12 @@
 package me.rerere.rikkahub.di
 
 import androidx.room.Room
+import io.ktor.http.HttpHeaders
 import io.pebbletemplates.pebble.PebbleEngine
 import kotlinx.serialization.json.Json
 import me.rerere.ai.provider.ProviderManager
+import me.rerere.common.http.AcceptLanguageBuilder
+import me.rerere.rikkahub.BuildConfig
 import me.rerere.rikkahub.data.ai.AIRequestInterceptor
 import me.rerere.rikkahub.data.ai.transformers.AssistantTemplateLoader
 import me.rerere.rikkahub.data.ai.GenerationHandler
@@ -13,8 +16,8 @@ import me.rerere.rikkahub.data.api.SponsorAPI
 import me.rerere.rikkahub.data.datastore.SettingsStore
 import me.rerere.rikkahub.data.db.AppDatabase
 import me.rerere.rikkahub.data.db.Migration_6_7
-import me.rerere.rikkahub.data.mcp.McpManager
-import me.rerere.rikkahub.data.sync.DataSync
+import me.rerere.rikkahub.data.ai.mcp.McpManager
+import me.rerere.rikkahub.data.sync.WebdavSync
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -69,11 +72,14 @@ val dataSourceModule = module {
             providerManager = get(),
             json = get(),
             memoryRepo = get(),
-            conversationRepo = get()
+            conversationRepo = get(),
+            aiLoggingManager = get()
         )
     }
 
     single<OkHttpClient> {
+        val acceptLang = AcceptLanguageBuilder.fromAndroid(get())
+            .build()
         OkHttpClient.Builder()
             .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.MINUTES)
@@ -81,6 +87,13 @@ val dataSourceModule = module {
             .followSslRedirects(true)
             .followRedirects(true)
             .retryOnConnectionFailure(true)
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader(HttpHeaders.AcceptLanguage, acceptLang)
+                    .addHeader(HttpHeaders.UserAgent, "RikkaHub-Android/${BuildConfig.VERSION_NAME}")
+                    .build()
+                chain.proceed(request)
+            }
             .addInterceptor(AIRequestInterceptor(remoteConfig = get()))
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.HEADERS
@@ -97,7 +110,7 @@ val dataSourceModule = module {
     }
 
     single {
-        DataSync(settingsStore = get(), json = get(), context = get())
+        WebdavSync(settingsStore = get(), json = get(), context = get())
     }
 
     single<Retrofit> {

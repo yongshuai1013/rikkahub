@@ -75,6 +75,13 @@
   <string name="assistant_page_quick_messages_desc">クイックメッセージのショートカットを設定</string>
   <string name="assistant_page_recent_chats">最近のチャット履歴を参照</string>
   <string name="assistant_page_recent_chats_desc">有効にすると、アシスタントは最近のチャット履歴を参照して、より文脈に沿った応答を提供します</string>
+  <string name="assistant_page_regex_affecting_scopes">影響範囲：</string>
+  <string name="assistant_page_regex_desc">メッセージの送受信前に変換する正規表現パターンを定義</string>
+  <string name="assistant_page_regex_find_regex">正規表現を検索</string>
+  <string name="assistant_page_regex_name">名前</string>
+  <string name="assistant_page_regex_replace_string">文字列を置換</string>
+  <string name="assistant_page_regex_title">メッセージ正規表現</string>
+  <string name="assistant_page_regex_visual_only">表示のみ（実際のメッセージには影響しません）</string>
   <string name="assistant_page_remove">削除</string>
   <string name="assistant_page_remove_background">背景を削除</string>
   <string name="assistant_page_save">保存</string>
@@ -172,6 +179,8 @@
   <string name="chat_message_tool_create_memory">記憶を作成しました</string>
   <string name="chat_message_tool_delete_memory">記憶を削除しました</string>
   <string name="chat_message_tool_edit_memory">記憶を更新しました</string>
+  <string name="chat_message_tool_scrape_prefix">ウェブサイトをスクレイピング: %1$s</string>
+  <string name="chat_message_tool_scrape_web">ウェブページを取得</string>
   <string name="chat_message_tool_search_prefix">検索: %1$s</string>
   <string name="chat_message_tool_search_results_count">%1$d件の結果</string>
   <string name="chat_message_tool_search_web">ウェブ検索: %1$s</string>
@@ -271,6 +280,7 @@
   <string name="language_japanese">🇯🇵 日本語</string>
   <string name="language_korean">🇰🇷 한국어</string>
   <string name="language_simplified_chinese">🇨🇳 简体中文</string>
+  <string name="language_spanish">🇪🇸 スペイン語</string>
   <string name="language_traditional_chinese">🇨🇳 繁體中文</string>
   <string name="mcp_picker_syncing">MCPサーバーを同期中...</string>
   <string name="mcp_picker_title">MCPサーバー</string>
@@ -333,6 +343,8 @@
   <string name="reasoning_set_budget">推論予算を設定 (%1$d トークン)</string>
   <string name="regenerate">再生成</string>
   <string name="render_with_webview">WebViewで表示</string>
+  <string name="search_ability_scrape">スクレイピング</string>
+  <string name="search_ability_search">検索</string>
   <string name="search_picker_title">検索設定</string>
   <string name="select_and_copy">選択コピー</string>
   <string name="send">送信</string>
@@ -344,6 +356,8 @@
   <string name="setting_display_page_chat_list_model_icon_title">チャットリストのモデルアイコン</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">アプリ起動時に新しい会話を自動作成する</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">起動時に新しいチャット</string>
+  <string name="setting_display_page_developer_mode">開発者モード</string>
+  <string name="setting_display_page_developer_mode_desc">デバッグ機能を追加で表示します。一般ユーザーへの推奨しません。</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_desc">メッセージ生成時に触覚フィードバックを有効にする</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_title">メッセージ生成時の触覚効果</string>
   <string name="setting_display_page_font_size_preview">これは**サンプル**のチャットテキストです</string>
@@ -533,6 +547,7 @@
   <string name="setting_provider_page_save_success">保存に成功しました</string>
   <string name="setting_provider_page_scan_error">エラー: %s</string>
   <string name="setting_provider_page_scan_qr_code">QRコードをスキャン</string>
+  <string name="setting_provider_page_search_providers">プロバイダーを検索</string>
   <string name="setting_provider_page_select_from_gallery">ギャラリーから選択</string>
   <string name="setting_provider_page_service_account_email">サービスアカウントメール</string>
   <string name="setting_provider_page_share">共有</string>
@@ -611,6 +626,7 @@
   <string name="tag_input_dialog_title">タグを追加</string>
   <string name="take_picture">写真を撮る</string>
   <string name="test_tts">音声テスト</string>
+  <string name="theme_name_autumn">秋の黄色</string>
   <string name="theme_name_black">ニュートラルブラック</string>
   <string name="theme_name_ocean">オーシャンブルー</string>
   <string name="theme_name_sakura">サクラピンク</string>

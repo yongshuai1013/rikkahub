@@ -75,6 +75,13 @@
   <string name="assistant_page_quick_messages_desc">Настроить ярлыки быстрых сообщений</string>
   <string name="assistant_page_recent_chats">Справка: недавние чаты</string>
   <string name="assistant_page_recent_chats_desc">При включении ассистент будет использовать недавнюю историю чатов для более контекстуальных ответов</string>
+  <string name="assistant_page_regex_affecting_scopes">Области действия:</string>
+  <string name="assistant_page_regex_desc">Задайте шаблоны регулярных выражений для преобразования сообщений перед отправкой/получением</string>
+  <string name="assistant_page_regex_find_regex">Найти регулярное выражение</string>
+  <string name="assistant_page_regex_name">Имя</string>
+  <string name="assistant_page_regex_replace_string">Заменить строку</string>
+  <string name="assistant_page_regex_title">Регулярные выражения для сообщений</string>
+  <string name="assistant_page_regex_visual_only">Только визуально (влияет только на отображение, не на само сообщение)</string>
   <string name="assistant_page_remove">Удалить</string>
   <string name="assistant_page_remove_background">Убрать фон</string>
   <string name="assistant_page_save">Сохранить</string>
@@ -172,6 +179,8 @@
   <string name="chat_message_tool_create_memory">Создана заметка</string>
   <string name="chat_message_tool_delete_memory">Удалённая память</string>
   <string name="chat_message_tool_edit_memory">Обновлена память</string>
+  <string name="chat_message_tool_scrape_prefix">Собрать данные с сайта: %1$s</string>
+  <string name="chat_message_tool_scrape_web">Собрать данные со страницы</string>
   <string name="chat_message_tool_search_prefix">Поиск: %1$s</string>
   <string name="chat_message_tool_search_results_count">%1$d результатов</string>
   <string name="chat_message_tool_search_web">Поиск в интернете: %1$s</string>
@@ -271,6 +280,7 @@
   <string name="language_japanese">🇯🇵 Японский</string>
   <string name="language_korean">🇰🇷 Корейский</string>
   <string name="language_simplified_chinese">🇷🇺 Упрощённый китайский</string>
+  <string name="language_spanish">🇪🇸 Испанский</string>
   <string name="language_traditional_chinese">🇨🇳 繁體中文</string>
   <string name="mcp_picker_syncing">Синхронизация MCP-серверов…</string>
   <string name="mcp_picker_title">Серверы MCP</string>
@@ -333,6 +343,8 @@
   <string name="reasoning_set_budget">Установить лимит рассуждений (%1$d токенов)</string>
   <string name="regenerate">Сгенерировать заново</string>
   <string name="render_with_webview">Отображать в WebView</string>
+  <string name="search_ability_scrape">Собрать</string>
+  <string name="search_ability_search">Поиск</string>
   <string name="search_picker_title">Поиск настроек</string>
   <string name="select_and_copy">Выделить и скопировать</string>
   <string name="send">Отправить</string>
@@ -344,6 +356,8 @@
   <string name="setting_display_page_chat_list_model_icon_title">Значок модели в списке чатов</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">Создавать новый диалог при запуске приложения</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">Новый чат при запуске</string>
+  <string name="setting_display_page_developer_mode">Режим разработчика</string>
+  <string name="setting_display_page_developer_mode_desc">Показать дополнительные функции отладки. Не рекомендуется для обычных пользователей.</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_desc">Включить виброотклик при генерации сообщений</string>
   <string name="setting_display_page_enable_message_generation_haptic_effect_title">Тактильный эффект при генерации сообщения</string>
   <string name="setting_display_page_font_size_preview">Это **пример** текста чата</string>
@@ -533,6 +547,7 @@
   <string name="setting_provider_page_save_success">Сохранено успешно</string>
   <string name="setting_provider_page_scan_error">Ошибка: %s</string>
   <string name="setting_provider_page_scan_qr_code">Сканировать QR-код</string>
+  <string name="setting_provider_page_search_providers">Поиск поставщиков</string>
   <string name="setting_provider_page_select_from_gallery">Выбрать из галереи</string>
   <string name="setting_provider_page_service_account_email">Электронная почта служебной учётной записи</string>
   <string name="setting_provider_page_share">Поделиться</string>
@@ -611,6 +626,7 @@
   <string name="tag_input_dialog_title">Добавить тег</string>
   <string name="take_picture">Сделать фото</string>
   <string name="test_tts">Проверка TTS</string>
+  <string name="theme_name_autumn">Осенний жёлтый</string>
   <string name="theme_name_black">Нейтральный чёрный</string>
   <string name="theme_name_ocean">Океанический синий</string>
   <string name="theme_name_sakura">Сакура Розовый</string>

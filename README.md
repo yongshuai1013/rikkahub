@@ -3,6 +3,7 @@
   <h1>RikkaHub</h1>
 
   [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/rikkahub/rikkahub)
+  [![Ask DeepWiki](https://img.shields.io/badge/zread.ai-blue?style=flat&logo=readthedocs)](https://zread.ai/rikkahub/rikkahub)
 
 A native Android LLM chat client that supports switching between different providers for
 conversations 🤖💬
@@ -22,6 +23,7 @@ Click to join our Discord server 👉 [【RikkaHub】](https://discord.gg/9weBqx
 ## 🚀 Download
 
 🔗 [Download from Website](https://rikka-ai.com/download)
+
 🔗 [Download from Google Play](https://play.google.com/store/apps/details?id=me.rerere.rikkahub)
 
 ## ✨ Features
@@ -33,7 +35,7 @@ Click to join our Discord server 👉 [【RikkaHub】](https://discord.gg/9weBqx
 - 🛠️ MCP support
 - 📝 Markdown Rendering (with code highlighting, Latex formulas, tables, Mermaid)
 - 🪾 Message Branching
-- 🔍 Search capabilities (Exa, Tavily, Zhipu, LinkUp, Brave, etc.)
+- 🔍 Search capabilities (Exa, Tavily, Zhipu, LinkUp, Brave, Perplexity, etc.)
 - 🧩 Prompt variables (model name, time, etc.)
 - 🤳 QR code export and import for providers
 - 🤖 Agent customization
@@ -73,7 +75,9 @@ Technology stack documentation:
 
 ## 💖 Thanks
 
-* Thanks to [SiliconFlow](https://siliconflow.cn/) providing free models in cooperation with us
+- Thanks to [SiliconFlow](https://siliconflow.cn/) providing free models in cooperation with us.
+- Thanks to [Aihubmix](https://aihubmix.com/) for their support. The post can be thanking aihubmix for their sponsorship. We recommend using aihubmix as a one-stop shop for mainstream models worldwide.
+(OpenAI, Claude, Google Gemini, DeepSeek, Qwen, and hundreds more).
 
 ## 💰 Donate
 
