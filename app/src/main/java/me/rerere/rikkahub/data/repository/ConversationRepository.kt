@@ -1,11 +1,13 @@
 package me.rerere.rikkahub.data.repository
 
 import android.content.Context
-import kotlinx.coroutines.Dispatchers
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import me.rerere.rikkahub.data.db.dao.ConversationDAO
 import me.rerere.rikkahub.data.db.entity.ConversationEntity
 import me.rerere.rikkahub.data.model.Conversation
@@ -19,13 +21,10 @@ class ConversationRepository(
     private val context: Context,
     private val conversationDAO: ConversationDAO,
 ) {
-    fun getAllConversations(): Flow<List<Conversation>> = conversationDAO
-        .getAll()
-        .map { flow ->
-            flow.map { entity ->
-                conversationEntityToConversation(entity)
-            }
-        }
+    companion object {
+        private const val PAGE_SIZE = 20
+        private const val INITIAL_LOAD_SIZE = 40
+    }
 
     suspend fun getRecentConversations(assistantId: Uuid, limit: Int = 10): List<Conversation> {
         return conversationDAO.getRecentConversationsOfAssistant(
@@ -44,6 +43,19 @@ class ConversationRepository(
             }
     }
 
+    fun getConversationsOfAssistantPaging(assistantId: Uuid): Flow<PagingData<Conversation>> = Pager(
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            initialLoadSize = INITIAL_LOAD_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { conversationDAO.getConversationsOfAssistantPaging(assistantId.toString()) }
+    ).flow.map { pagingData ->
+        pagingData.map { entity ->
+            conversationSummaryToConversation(entity)
+        }
+    }
+
     fun searchConversations(titleKeyword: String): Flow<List<Conversation>> {
         return conversationDAO
             .searchConversations(titleKeyword)
@@ -52,6 +64,19 @@ class ConversationRepository(
                     conversationEntityToConversation(entity)
                 }
             }
+    }
+
+    fun searchConversationsPaging(titleKeyword: String): Flow<PagingData<Conversation>> = Pager(
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            initialLoadSize = INITIAL_LOAD_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { conversationDAO.searchConversationsPaging(titleKeyword) }
+    ).flow.map { pagingData ->
+        pagingData.map { entity ->
+            conversationSummaryToConversation(entity)
+        }
     }
 
     fun searchConversationsOfAssistant(assistantId: Uuid, titleKeyword: String): Flow<List<Conversation>> {
@@ -64,19 +89,24 @@ class ConversationRepository(
             }
     }
 
+    fun searchConversationsOfAssistantPaging(assistantId: Uuid, titleKeyword: String): Flow<PagingData<Conversation>> = Pager(
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            initialLoadSize = INITIAL_LOAD_SIZE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { conversationDAO.searchConversationsOfAssistantPaging(assistantId.toString(), titleKeyword) }
+    ).flow.map { pagingData ->
+        pagingData.map { entity ->
+            conversationSummaryToConversation(entity)
+        }
+    }
+
     suspend fun getConversationById(uuid: Uuid): Conversation? {
         val entity = conversationDAO.getConversationById(uuid.toString())
         return if (entity != null) {
             conversationEntityToConversation(entity)
         } else null
-    }
-
-    suspend fun upsertConversation(conversation: Conversation) {
-        if (getConversationById(conversation.id) != null) {
-            updateConversation(conversation)
-        } else {
-            insertConversation(conversation)
-        }
     }
 
     suspend fun insertConversation(conversation: Conversation) {
@@ -135,13 +165,6 @@ class ConversationRepository(
         )
     }
 
-    suspend fun deleteAllConversations() = withContext(Dispatchers.IO) {
-        conversationDAO.getAll().first().forEach { conversation ->
-            conversationDAO.delete(conversation)
-            context.deleteChatFiles(conversationEntityToConversation(conversation).files)
-        }
-    }
-
     fun getPinnedConversations(): Flow<List<Conversation>> {
         return conversationDAO
             .getPinnedConversations()
@@ -159,17 +182,27 @@ class ConversationRepository(
         )
     }
 
-    suspend fun pinConversation(conversationId: Uuid) {
-        conversationDAO.updatePinStatus(
-            id = conversationId.toString(),
-            isPinned = true
-        )
-    }
-
-    suspend fun unpinConversation(conversationId: Uuid) {
-        conversationDAO.updatePinStatus(
-            id = conversationId.toString(),
-            isPinned = false
+    private fun conversationSummaryToConversation(entity: LightConversationEntity): Conversation {
+        return Conversation(
+            id = Uuid.parse(entity.id),
+            assistantId = Uuid.parse(entity.assistantId),
+            title = entity.title,
+            isPinned = entity.isPinned,
+            createAt = Instant.ofEpochMilli(entity.createAt),
+            updateAt = Instant.ofEpochMilli(entity.updateAt),
+            messageNodes = emptyList(),
         )
     }
 }
+
+/**
+ * 轻量级的会话查询结果，不包含 nodes 和 suggestions 字段
+ */
+data class LightConversationEntity(
+    val id: String,
+    val assistantId: String,
+    val title: String,
+    val isPinned: Boolean,
+    val createAt: Long,
+    val updateAt: Long,
+)

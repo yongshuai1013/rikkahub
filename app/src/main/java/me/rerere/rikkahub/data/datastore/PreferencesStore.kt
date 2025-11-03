@@ -350,6 +350,8 @@ data class DisplaySetting(
     val enableMessageGenerationHapticEffect: Boolean = false,
     val skipCropImage: Boolean = false,
     val enableNotificationOnMessageGeneration: Boolean = false,
+    val codeBlockAutoWrap: Boolean = false,
+    val codeBlockAutoCollapse: Boolean = false,
 )
 
 @Serializable
@@ -460,6 +462,13 @@ private val DEFAULT_TTS_PROVIDERS = listOf(
     TTSProviderSetting.SystemTTS(
         id = DEFAULT_SYSTEM_TTS_ID,
         name = "",
+    ),
+    TTSProviderSetting.OpenAI(
+        id = Uuid.parse("e36b22ef-ca82-40ab-9e70-60cad861911c"),
+        name = "AiHubMix",
+        baseUrl = "https://aihubmix.com/v1",
+        model = "gpt-4o-mini-tts",
+        voice = "alloy",
     )
 )
 
